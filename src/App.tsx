@@ -1,11 +1,12 @@
 import './App.css'
+import Stories from './Stories'
 
 function App() {
 
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <div>
+      <Stories />
+    </div>
   )
 }
 
