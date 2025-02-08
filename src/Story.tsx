@@ -1,5 +1,5 @@
 import { Heart, Loader2, Send } from 'lucide-react'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router'
 import mockData from './data';
 import { TStory, TUserStory, } from './types/Story';
@@ -8,11 +8,15 @@ export default function Story() {
     const [story, setStory] = useState<TStory | null>(null)
     const [user, setUser] = useState<TUserStory | null>(null)
     const [error, setError] = useState(false)
+    const [progress, setProgress] = useState(0);
+    const startTimeRef = useRef<number | null>(null);
+    const requestRef = useRef<number | null>(null);
+    const elapsedTimeRef = useRef(0);
+
     const navigate = useNavigate()
     const path = useParams();
 
     useEffect(() => {
-
         if (user) {
             const findStory = user?.stories.find(st => st.id === path.storyId)
 
@@ -108,7 +112,27 @@ export default function Story() {
     }
 
 
+    useEffect(() => {
+        startProgress();
 
+        return () => cancelAnimationFrame((requestRef.current as number));
+    }, [story]);
+
+    const startProgress = () => {
+        startTimeRef.current = performance.now() - elapsedTimeRef.current;
+        updateProgress();
+    };
+
+    const updateProgress = () => {
+        const elapsedTime = performance.now() - (startTimeRef.current as number);
+        const progressPercent = Math.min((elapsedTime / 5000) * 100, 100);
+
+        setProgress(progressPercent)
+
+        if (progressPercent < 100) {
+            requestRef.current = requestAnimationFrame(updateProgress);
+        }
+    };
 
     return (
         <div className={`absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center bg-gray-800 text-white text-2xl`}>
@@ -125,6 +149,12 @@ export default function Story() {
                         <p className='text-sm'>{user.username}</p>
                         <p className='text-sm text-gray-600 font-bold'>56 min</p>
                     </div>
+
+                    {/**Progress Bar */}
+                    <div className='absolute top-11 w-full left-0 h-1 bg-black opacity-65'>
+                        <div className={`h-full bg-white `} style={{ width: `${progress}%` }}></div>
+                    </div>
+
                     <div className='w-[30%] absolute h-full top-0 left-0' onClick={() => handlePrevious()}></div>
                     <img src={story.photo} className='w-full h-full rounded-xl' alt="modal-image" />
                     <div className='w-[30%] absolute h-full top-0 right-0' onClick={() => handleNext()}></div>
