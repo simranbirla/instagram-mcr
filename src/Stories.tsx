@@ -4,6 +4,7 @@ import { TUserStory } from './types/Story';
 import UserStory from './UserStory';
 
 export default function Stories() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [stories, _setStories] = useState<TUserStory[]>(mockData);
 
     return (
