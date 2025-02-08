@@ -1,24 +1,16 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import mockData from './data'
 import { TUserStory } from './types/Story';
 import UserStory from './UserStory';
-import Modal from './Modal';
 
 export default function Stories() {
-    const [stories, setStories] = useState<TUserStory[]>(mockData);
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-
-    const handleModal = (open: boolean) => {
-        setIsOpen(open)
-    }
+    const [stories, _setStories] = useState<TUserStory[]>(mockData);
 
     return (
-        <div className='flex gap-4'>
+        <div className='flex gap-4 overflow-x-auto scroll-smooth .story-scrollbar'>
             {stories.map(s => {
-                return <div key={s.id}><UserStory {...s} handleModal={handleModal} /></div>
+                return <div key={s.id}><UserStory {...s} /></div>
             })}
-            <Modal open={isOpen} onChange={handleModal} />
         </div>
     )
 }
