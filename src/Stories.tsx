@@ -6,13 +6,19 @@ import Modal from './Modal';
 
 export default function Stories() {
     const [stories, setStories] = useState<TUserStory[]>(mockData);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+
+    const handleModal = (open: boolean) => {
+        setIsOpen(open)
+    }
 
     return (
         <div className='flex gap-4'>
             {stories.map(s => {
-                return <div key={s.id}><UserStory {...s} /></div>
+                return <div key={s.id}><UserStory {...s} handleModal={handleModal} /></div>
             })}
-            <Modal />
+            <Modal open={isOpen} onChange={handleModal} />
         </div>
     )
 }
