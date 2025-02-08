@@ -25,7 +25,7 @@ const mockData = [
         stories: [
             {
                 id: 'fa3ad7a0-a5e0-49f9-975f-bc985534a556',
-                photo: "https://via.placeholder.com/200/33FF57/FFFFFF?text=Story1",
+                photo: "https://wallpaperaccess.com/full/3770392.jpg",
                 createdAt: "2025-02-07T18:45:00Z",
             },
         ],
@@ -38,17 +38,17 @@ const mockData = [
         stories: [
             {
                 id: 'a6633070-6666-4372-a678-2558baa0f245',
-                photo: "https://via.placeholder.com/200/3357FF/FFFFFF?text=Story1",
+                photo: "https://wallpaperaccess.com/full/3770399.jpg",
                 createdAt: "2025-02-07T15:20:00Z",
             },
             {
                 id: 'b4613070-863d-4372-a678-2558baa0f245',
-                photo: "https://via.placeholder.com/200/3357FF/FFFFFF?text=Story2",
+                photo: "https://e0.pxfuel.com/wallpapers/885/242/desktop-wallpaper-pin-di-nature-nature-portrait.jpg",
                 createdAt: "2025-02-07T16:00:00Z",
             },
             {
                 id: 'a6633070-863d-4372-a678-2558baa009a6',
-                photo: "https://via.placeholder.com/200/3357FF/FFFFFF?text=Story3",
+                photo: "https://wallpaperaccess.com/full/3770393.jpg",
                 createdAt: "2025-02-07T20:30:00Z",
             },
         ],
@@ -61,7 +61,7 @@ const mockData = [
         stories: [
             {
                 id: 'b3667070-863d-4372-a678-2558baa0f245',
-                photo: "https://via.placeholder.com/200/FF33A1/FFFFFF?text=Story1",
+                photo: "https://p4.wallpaperbetter.com/wallpaper/663/700/853/nature-landscape-portrait-display-hd-wallpaper-preview.jpg",
                 createdAt: "2025-02-06T09:00:00Z",
             },
         ],
@@ -74,7 +74,7 @@ const mockData = [
         stories: [
             {
                 id: 'cf928fec-90e9-4dc9-86ad-5afcc60a7dae',
-                photo: "https://via.placeholder.com/200/A1FF33/FFFFFF?text=Story1",
+                photo: "https://wallpaperaccess.com/full/3123093.jpg",
                 createdAt: "2025-02-05T14:10:00Z",
             },
         ],
