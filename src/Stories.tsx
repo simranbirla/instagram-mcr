@@ -9,9 +9,9 @@ export default function Stories() {
 
     return (
         <div className='min-h-[100vh] w-100vw bg-white p-8'>
-            <div className='flex gap-4 overflow-x-auto scroll-smooth .story-scrollbar'>
+            <div className='flex gap-4 overflow-x-auto scroll-smooth story-scrollbar user-stories'>
                 {stories.map(s => {
-                    return <div key={s.id}><UserStory {...s} /></div>
+                    return <UserStory {...s} key={s.id} />
                 })}
             </div>
         </div>

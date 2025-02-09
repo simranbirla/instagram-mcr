@@ -102,7 +102,7 @@ export default function Story() {
 
 
     useEffect(() => {
-        let storyTimeout: number | undefined;
+        let storyTimeout: NodeJS.Timeout | undefined;
         if (user && story) {
             storyTimeout = setTimeout(() => {
                 nextStory(user, story)
@@ -173,7 +173,7 @@ export default function Story() {
                 :
                 <div
                     className='w-[85%] h-[80%] relative rounded-2xl'>
-                    <div className='absolute top-2 right-4 font-bold cursor-pointer z-20' onClick={() => handleClose()}>
+                    <div className='absolute top-2 right-4 font-bold cursor-pointer z-20 close' onClick={() => handleClose()}>
                         X
                     </div>
                     <div className='flex gap-3 absolute top-2 left-2 items-center'>

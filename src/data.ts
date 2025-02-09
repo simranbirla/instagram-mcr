@@ -1,5 +1,12 @@
 const mockData = [
     {
+        id: '955f9dd8-2d5e-461b-82fd-42fcf25e4234',
+        name: "You",
+        username: "your_username",
+        displayPicture: "https://avatar.iran.liara.run/public/girl?username=sim",
+        stories: [],
+    },
+    {
         id: '955f9dd8-2d5e-461b-82fd-42fcf25e420d',
         name: "John Doe",
         username: "john_ddddd",
