@@ -8,10 +8,12 @@ export default function Stories() {
     const [stories, _setStories] = useState<TUserStory[]>(mockData);
 
     return (
-        <div className='flex gap-4 overflow-x-auto scroll-smooth .story-scrollbar'>
-            {stories.map(s => {
-                return <div key={s.id}><UserStory {...s} /></div>
-            })}
+        <div className='min-h-[100vh] w-100vw bg-white p-8'>
+            <div className='flex gap-4 overflow-x-auto scroll-smooth .story-scrollbar'>
+                {stories.map(s => {
+                    return <div key={s.id}><UserStory {...s} /></div>
+                })}
+            </div>
         </div>
     )
 }

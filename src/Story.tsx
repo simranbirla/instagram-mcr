@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router'
 import mockData from './data';
 import { TStory, TUserStory, } from './types/Story';
-import { AnimatePresence, motion } from "motion/react"
+import { motion } from "motion/react"
 
 export default function Story() {
     const [story, setStory] = useState<TStory | null>(null)
@@ -159,50 +159,47 @@ export default function Story() {
     }
 
     return (
-        <div
-            className={`absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center bg-gray-800 text-white text-2xl perspective-[1000px]`}>
+        <motion.div
+            key={params.storyId}
+            initial={{ opacity: 0.8, rotateY: direction === "prev" ? -45 : direction === "next" ? 45 : 0 }}
+            animate={{ opacity: 1, rotateY: 0 }}
+            exit={{ rotateY: direction === "prev" ? 45 : direction === "next" ? -45 : 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={`absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center bg-['#242424'] text-white text-2xl perspective-[1000px]`}>
             {(!story || !user || error) ?
                 <div className='w-[85%] h-[80%] flex justify-center items-center rounded-2xl bg-gray-700'>
                     <Loader2 className='size-16 animate-spin' />
                 </div>
                 :
-                <AnimatePresence>
+                <div
+                    className='w-[85%] h-[80%] relative rounded-2xl'>
+                    <div className='absolute top-2 right-4 font-bold cursor-pointer z-20' onClick={() => handleClose()}>
+                        X
+                    </div>
+                    <div className='flex gap-3 absolute top-2 left-2 items-center'>
+                        <img src={user?.displayPicture} className='rounded-full size-8' alt={user?.name} />
+                        <p className='text-sm'>{user.username}</p>
+                        <p className='text-sm text-gray-600 font-bold'>{timeOfStory}</p>
+                    </div>
 
-                    <motion.div
-                        key={params.storyId}
-                        initial={{ opacity: 0.8, rotateY: direction === "prev" ? -45 : direction === "next" ? 45 : 0 }}
-                        animate={{ opacity: 1, rotateY: 0 }}
-                        exit={{ rotateY: 100, scale: 0.2 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className='w-[85%] h-[80%] relative rounded-2xl'>
-                        <div className='absolute top-2 right-4 font-bold cursor-pointer z-20' onClick={() => handleClose()}>
-                            X
-                        </div>
-                        <div className='flex gap-3 absolute top-2 left-2 items-center'>
-                            <img src={user?.displayPicture} className='rounded-full size-8' alt={user?.name} />
-                            <p className='text-sm'>{user.username}</p>
-                            <p className='text-sm text-gray-600 font-bold'>{timeOfStory}</p>
-                        </div>
+                    {/**Progress Bar */}
+                    <div className='absolute top-11 w-full left-0 h-1 bg-black opacity-65'>
+                        <div className={`h-full bg-white `} style={{ width: `${progress}%` }}></div>
+                    </div>
 
-                        {/**Progress Bar */}
-                        <div className='absolute top-11 w-full left-0 h-1 bg-black opacity-65'>
-                            <div className={`h-full bg-white `} style={{ width: `${progress}%` }}></div>
-                        </div>
-
-                        <div className='w-[40%] absolute h-full top-0 left-0' onClick={() => handlePrevious()}></div>
-                        <img src={story.photo} className='w-full h-full rounded-xl' alt="modal-image" />
-                        <div className='w-[40%] absolute h-full top-0 right-0' onClick={() => handleNext()}></div>
-                        <div className="flex gap-2 items-center justify-center mt-2" >
-                            <input type="text" placeholder={`Reply to ${user?.username}`} className="border-white border-2 rounded-4xl p-2 text-sm w-[60%]" />
-                            <Heart className="size-4 cursor-pointer" />
-                            <Send className="size-4 cursor-pointer" />
-                        </div>
-                    </motion.div>
-                </AnimatePresence>
+                    <div className='w-[40%] absolute h-full top-0 left-0' onClick={() => handlePrevious()}></div>
+                    <img src={story.photo} className='w-full h-full rounded-xl' alt="modal-image" />
+                    <div className='w-[40%] absolute h-full top-0 right-0' onClick={() => handleNext()}></div>
+                    <div className="flex gap-2 items-center justify-center mt-2" >
+                        <input type="text" placeholder={`Reply to ${user?.username}`} className="border-white border-2 rounded-4xl p-2 text-sm w-[60%]" />
+                        <Heart className="size-4 cursor-pointer" />
+                        <Send className="size-4 cursor-pointer" />
+                    </div>
+                </div>
 
             }
 
-        </div>
+        </motion.div>
 
     )
 }
