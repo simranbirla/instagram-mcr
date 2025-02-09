@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router';
 import './App.css'
-import Stories from './Stories'
-import Story from './Story';
+import Stories from './components/Stories'
+import Story from './components/Story';
 import { AnimatePresence } from 'motion/react';
 
 function App() {

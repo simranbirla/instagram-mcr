@@ -1,4 +1,4 @@
-import { TStory } from './types/Story'
+import { TStory } from '../types/Story'
 import { useNavigate } from 'react-router';
 
 export interface IUserStory {

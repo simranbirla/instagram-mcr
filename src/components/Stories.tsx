@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import mockData from './data'
-import { TUserStory } from './types/Story';
+import mockData from '../utils/data'
+import { TUserStory } from '../types/Story';
 import UserStory from './UserStory';
 
 export default function Stories() {

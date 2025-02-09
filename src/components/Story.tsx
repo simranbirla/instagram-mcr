@@ -1,8 +1,8 @@
 import { Heart, Loader2, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router'
-import mockData from './data';
-import { TStory, TUserStory, } from './types/Story';
+import mockData from '../utils/data';
+import { TStory, TUserStory, } from '../types/Story';
 import { motion } from "motion/react"
 
 export default function Story() {
@@ -188,7 +188,7 @@ export default function Story() {
                     </div>
 
                     <div className='w-[40%] absolute h-full top-0 left-0' onClick={() => handlePrevious()}></div>
-                    <img src={story.photo} className='w-full h-full rounded-xl' alt="modal-image" />
+                    <img src={story.photo} className='w-full h-full rounded-xl' alt={'Story Image'} />
                     <div className='w-[40%] absolute h-full top-0 right-0' onClick={() => handleNext()}></div>
                     <div className="flex gap-2 items-center justify-center mt-2" >
                         <input type="text" placeholder={`Reply to ${user?.username}`} className="border-white border-2 rounded-4xl p-2 text-sm w-[60%]" />
