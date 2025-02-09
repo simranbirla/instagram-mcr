@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router'
 import mockData from './data';
 import { TStory, TUserStory, } from './types/Story';
-import { motion, AnimatePresence } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
 
 export default function Story() {
     const [story, setStory] = useState<TStory | null>(null)
@@ -15,12 +15,14 @@ export default function Story() {
     const requestRef = useRef<number | null>(null);
     const elapsedTimeRef = useRef(0);
 
+    const direction = localStorage.getItem("direction")
+
     const navigate = useNavigate()
-    const path = useParams();
+    const params = useParams();
 
     useEffect(() => {
         if (user) {
-            const findStory = user?.stories.find(st => st.id === path.storyId)
+            const findStory = user?.stories.find(st => st.id === params.storyId)
 
             if (!findStory) {
                 setError(true)
@@ -40,32 +42,32 @@ export default function Story() {
 
         }
 
-    }, [path.storyId, user])
+    }, [params.storyId, user])
 
 
     useEffect(() => {
-        const findUserData = mockData.find(user => user.username === path.username);
+        const findUserData = mockData.find(user => user.username === params.username);
 
         if (!findUserData) {
             setError(true)
         }
 
         setUser(findUserData as TUserStory)
-    }, [path.username])
+    }, [params.username])
 
 
     const nextStory = (userData: TUserStory, storyData: TStory) => {
-        setStory(null)
+        localStorage.setItem("direction", "next")
         if (userData?.stories[userData.stories.length - 1].id === storyData?.id) {
             setUser(null)
             const nextUserIndex = (mockData.findIndex(u => u.username === userData.username)) + 1;
 
             if (nextUserIndex === mockData.length) {
+                localStorage.setItem("direction", "")
                 navigate("/")
             } else {
                 const nextStoryId = mockData[nextUserIndex].stories[0].id
                 const nextUsername = mockData[nextUserIndex].username;
-
                 navigate(`/stories/${nextUsername}/${nextStoryId}`)
             }
         } else {
@@ -77,21 +79,23 @@ export default function Story() {
 
     const prevStory = (userData: TUserStory, storyData: TStory) => {
         setStory(null)
+        localStorage.setItem("direction", "prev")
         if (user?.stories[0].id === storyData.id) {
             setUser(null)
             const prevUserIndex = (mockData.findIndex(u => u.username === userData.username)) - 1;
 
             if (prevUserIndex < 0) {
+                localStorage.setItem("direction", "")
                 navigate("/")
             } else {
                 const prevStoryId = mockData[prevUserIndex].stories[(mockData[prevUserIndex].stories.length) - 1].id
                 const prevUsername = mockData[prevUserIndex].username;
-
                 navigate(`/stories/${prevUsername}/${prevStoryId}`)
             }
         } else {
             const findIndex = userData?.stories.findIndex(st => st.id === storyData?.id)
             const prevStoryId = userData.stories[findIndex - 1].id
+
             navigate(`/stories/${userData.username}/${prevStoryId}`)
         }
     }
@@ -136,6 +140,7 @@ export default function Story() {
         updateProgress();
     };
 
+
     const updateProgress = () => {
         const elapsedTime = performance.now() - (startTimeRef.current as number);
         const progressPercent = Math.min((elapsedTime / 5000) * 100, 100);
@@ -147,22 +152,30 @@ export default function Story() {
         }
     };
 
+
+    const handleClose = () => {
+        localStorage.setItem("direction", "")
+        navigate("/")
+    }
+
     return (
-        <AnimatePresence>
-            <div
-                className={`absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center bg-gray-800 text-white text-2xl perspective-midrange`}>
-                {(!story || !user || error) ?
-                    <div className='w-[85%] h-[80%] flex justify-center items-center rounded-2xl bg-gray-700'>
-                        <Loader2 className='size-16 animate-spin' />
-                    </div>
-                    : <motion.div
-                        key={path.storyId}
-                        initial={{ opacity: 0.8, scale: 0.9, rotateY: 45 }}
-                        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                        exit={{ rotateX: 80, x: -100 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
+        <div
+            className={`absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center bg-gray-800 text-white text-2xl perspective-[1000px]`}>
+            {(!story || !user || error) ?
+                <div className='w-[85%] h-[80%] flex justify-center items-center rounded-2xl bg-gray-700'>
+                    <Loader2 className='size-16 animate-spin' />
+                </div>
+                :
+                <AnimatePresence>
+
+                    <motion.div
+                        key={params.storyId}
+                        initial={{ opacity: 0.8, rotateY: direction === "prev" ? -45 : direction === "next" ? 45 : 0 }}
+                        animate={{ opacity: 1, rotateY: 0 }}
+                        exit={{ rotateY: 100, scale: 0.2 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
                         className='w-[85%] h-[80%] relative rounded-2xl'>
-                        <div className='absolute top-2 right-4 font-bold cursor-pointer z-20' onClick={() => navigate('/')}>
+                        <div className='absolute top-2 right-4 font-bold cursor-pointer z-20' onClick={() => handleClose()}>
                             X
                         </div>
                         <div className='flex gap-3 absolute top-2 left-2 items-center'>
@@ -184,9 +197,12 @@ export default function Story() {
                             <Heart className="size-4 cursor-pointer" />
                             <Send className="size-4 cursor-pointer" />
                         </div>
-                    </motion.div>}
+                    </motion.div>
+                </AnimatePresence>
 
-            </div>
-        </AnimatePresence>
+            }
+
+        </div>
+
     )
 }
