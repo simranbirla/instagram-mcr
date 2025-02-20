@@ -14,6 +14,10 @@ export default function Story() {
     const startTimeRef = useRef<number | null>(null);
     const requestRef = useRef<number | null>(null);
     const elapsedTimeRef = useRef(0);
+    const [loaded, setLoaded] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [imgEl, setImgEl] = useState<any>(null);
+
 
     const direction = localStorage.getItem("direction")
 
@@ -84,7 +88,7 @@ export default function Story() {
             setUser(null)
             const prevUserIndex = (mockData.findIndex(u => u.username === userData.username)) - 1;
 
-            if (prevUserIndex < 0) {
+            if (prevUserIndex === 0) {
                 localStorage.setItem("direction", "")
                 navigate("/")
             } else {
@@ -100,10 +104,24 @@ export default function Story() {
         }
     }
 
+    const onImageLoaded = () => {
+        setLoaded(true)
+    }
+
+    useEffect(() => {
+        if (imgEl) {
+            imgEl.addEventListener('load', onImageLoaded);
+            return () => imgEl.removeEventListener('load', onImageLoaded);
+        }
+    }, [imgEl])
+
+
 
     useEffect(() => {
         let storyTimeout: NodeJS.Timeout | undefined;
-        if (user && story) {
+        if (user && story && loaded) {
+            startProgress();
+
             storyTimeout = setTimeout(() => {
                 nextStory(user, story)
             }, 5000)
@@ -111,8 +129,10 @@ export default function Story() {
 
         return () => {
             clearTimeout(storyTimeout)
+            cancelAnimationFrame((requestRef.current as number));
+
         }
-    }, [user, story])
+    }, [user, story, loaded])
 
 
     const handleNext = () => {
@@ -127,13 +147,6 @@ export default function Story() {
             prevStory(user, story)
         }
     }
-
-
-    useEffect(() => {
-        startProgress();
-
-        return () => cancelAnimationFrame((requestRef.current as number));
-    }, [story]);
 
     const startProgress = () => {
         startTimeRef.current = performance.now() - elapsedTimeRef.current;
@@ -188,7 +201,8 @@ export default function Story() {
                     </div>
 
                     <div className='w-[40%] absolute h-full top-0 left-0' onClick={() => handlePrevious()}></div>
-                    <img src={story.photo} className='w-full h-full rounded-xl' alt={'Story Image'} />
+                    <img src={story.photo} className='w-full h-full rounded-xl' alt={'Story Image'} ref={(el) => setImgEl(el)} />
+
                     <div className='w-[40%] absolute h-full top-0 right-0' onClick={() => handleNext()}></div>
                     <div className="flex gap-2 items-center justify-center mt-2" >
                         <input type="text" placeholder={`Reply to ${user?.username}`} className="border-white border-2 rounded-4xl p-2 text-sm w-[60%]" />
